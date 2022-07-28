@@ -8,7 +8,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  // 요청 성공 직전 호출
+  // 요청 성공 직전 호출 1
   // axios 설정값 넣음
   (config: any) => {
     const token = getCookie("token");
