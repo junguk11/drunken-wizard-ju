@@ -3,7 +3,6 @@ import { getCookie } from "../../Cookies";
 
 /* axios instance */
 const API_URL = process.env.REACT_APP_API_URL;
-// const API_URL = "https://mo-greene.shop/";
 const api = axios.create({
   baseURL: API_URL,
 });
