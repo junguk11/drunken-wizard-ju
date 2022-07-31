@@ -30,15 +30,15 @@ import {
 import { getCookie } from "../shared/Cookies";
 
 /* Components */
-import PlayerField from "../Components/ingameComponents/PlayerField/PlayerField";
-import DrawModal from "../Components/ingameComponents/Modals/DrawModal";
-import NoticeField from "../Components/ingameComponents/NoticeField/NoticeField";
-import StartModal from "../Components/ingameComponents/Modals/StartModal";
-import PlayerIcons from "../Components/ingameComponents/MainField/PlayerIcons";
-import CraveField from "../Components/ingameComponents/MainField/CraveField";
-import PlayerStatus from "../Components/ingameComponents/MainField/PlayerStatus";
+import PlayerField from "../Components/IngameComponents/PlayerField/PlayerField";
+import DrawModal from "../Components/IngameComponents/Modals/DrawModal";
+import NoticeField from "../Components/IngameComponents/NoticeField/NoticeField";
+import StartModal from "../Components/IngameComponents/Modals/StartModal";
+import PlayerIcons from "../Components/IngameComponents/MainField/PlayerIcons";
+import CraveField from "../Components/IngameComponents/MainField/CraveField";
+import PlayerStatus from "../Components/IngameComponents/MainField/PlayerStatus";
 import TwoBtnModal from "../elem/TwoBtnModal";
-import OverModal from "../Components/ingameComponents/Modals/OverModal";
+import OverModal from "../Components/IngameComponents/Modals/OverModal";
 import Header from "../Components/HeaderComponents/Header";
 
 /* CSS & SC */
@@ -46,9 +46,9 @@ import {
   StGameWrap,
   MainWrap,
   StGameWrapFilter,
-} from "../Components/ingameComponents/InGameStyled/InGameStyled";
+} from "../Components/IngameComponents/InGameStyled/InGameStyled";
 import { playersSetting } from "../typings/typedb";
-import AlertPopUp from "../Components/ingameComponents/InGameCommon/AlertPopUp";
+import AlertPopUp from "../Components/IngameComponents/InGameCommon/AlertPopUp";
 import useSound from "use-sound";
 import turn from "../sounds/turn.mp3";
 
