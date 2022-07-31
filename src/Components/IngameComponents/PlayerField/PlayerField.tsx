@@ -22,7 +22,6 @@ import {
 /* Components */
 // import Cards from "./Cards";
 import MyProfile from "./MyProfile";
-
 /* CSS & SC */
 import AlertPopUp from "../InGameCommon/AlertPopUp";
 import {
@@ -70,7 +69,7 @@ const PlayerField: FunctionComponent<PlayerFieldProps> = ({
 
   useEffect(() => {
     setDisableHeal(false);
-    setHealCnt(true);
+    // setHealCnt(true);
   }, [status]);
 
   /* tookit things */
@@ -185,14 +184,16 @@ const PlayerField: FunctionComponent<PlayerFieldProps> = ({
     event: React.MouseEvent<HTMLButtonElement>,
     value: playersSetting
   ) => {
+    console.log(value);
     if (value.dead === true) {
       setUseFail(true);
       return;
     } else {
       const data = {
-        targetPlayerId: target,
+        targetPlayerId: value.playerId,
         cardId: 0,
       };
+      console.log(data);
       play();
       sendStompMsgFunc(roomId, thisPlayer.playerId, "USECARD", data);
       setHealCnt(false);
@@ -207,7 +208,7 @@ const PlayerField: FunctionComponent<PlayerFieldProps> = ({
       onClick={(event: any) => sendHealMsgHandler(event, value)}
       value={value.playerId}
       disabled={clicked}
-      team={value.team === thisPlayer.team}
+      team={value.team}
       onMouseOver={(event: any) => onMouseOverTargeting(event, value)}
       onMouseLeave={onMouseLeaveTargeting}
     >
@@ -229,7 +230,7 @@ const PlayerField: FunctionComponent<PlayerFieldProps> = ({
       onClick={(event: any) => cardUseHandler(event, value)}
       disabled={clicked}
       value={value.playerId}
-      team={value.team === thisPlayer.team}
+      team={value.team}
     >
       {index === 0 && "E1"}
       {index === 1 && "E2"}
@@ -351,10 +352,7 @@ const PlayerField: FunctionComponent<PlayerFieldProps> = ({
                         <span>순서 확인</span>
                         <div className="turn__button--box">
                           {playersList.map((value) => (
-                            <TurnBtn
-                              key={value.turnOrder}
-                              team={value.team === thisPlayer.team}
-                            >
+                            <TurnBtn key={value.turnOrder} team={value.team}>
                               {value.turnOrder}
                             </TurnBtn>
                           ))}
@@ -376,7 +374,7 @@ const PlayerField: FunctionComponent<PlayerFieldProps> = ({
                 <span>순서확인</span>
                 <div className="turn__button--box">
                   {playersList.map((value, index) => (
-                    <TurnBtn key={index} team={value.team === thisPlayer.team}>
+                    <TurnBtn key={index} team={value.team}>
                       {value.turnOrder}
                     </TurnBtn>
                   ))}

@@ -3,11 +3,11 @@ import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 // stomp
 import stompJS from "stompjs";
-import { socket } from "../../shared/WebStomp";
+import { socket } from "../../Shared/WebStomp";
 // apis
-import apis from "../../shared/api/apis";
+import apis from "../../Shared/api/apis";
 // hooks
-import { getCookie } from "../../shared/Cookies";
+import { getCookie } from "../../Shared/Cookies";
 // interface
 import { SoundModalType2 } from "../../typings/db";
 // css
@@ -94,7 +94,6 @@ const Rooms = ({ btnSound }: SoundModalType2) => {
     try {
       stompClient.unsubscribe(`/sub/public`);
       // console.log("success to unsubscribe");
-      // leaveMessage();
     } catch (error) {
       // console.log(error);
     }

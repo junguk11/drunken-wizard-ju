@@ -1,12 +1,12 @@
 import styled, { keyframes } from "styled-components";
 import flex from "../GlobalStyled/flex";
-import logoImg from "../../images/logo/logo.png";
-import bubble from "../../images/imgs/bubble.png";
-import introBg from "../../images/background/introBackground.png";
-import LeftBeer from "../../images/splash/leftBeer.png";
-import RightBeer from "../../images/splash/rightBeer.png";
-import beerBg from "../../images/splash/beer_bg.png";
-import shadow from "../../images/splash/shadow.png";
+import logoImg from "../../images/logo/logo.webp";
+import bubble from "../../images/imgs/bubble.webp";
+import introBg from "../../images/background/introBackground.webp";
+import LeftBeer from "../../images/splash/leftBeer.webp";
+import RightBeer from "../../images/splash/rightBeer.webp";
+import beerBg from "../../images/splash/beer_bg.webp";
+import shadow from "../../images/splash/shadow.webp";
 import { LogoProps, DupCheckProps } from "../../typings/typedb";
 
 export const BackWrap = styled.div`
@@ -157,6 +157,21 @@ export const RuleBtn = styled.button`
     width: 3.645vw;
     height: 4.6875vw;
   }
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(120%);
+  }
+`;
+
+export const RuleBuBleBtn = styled.img`
+  position: absolute;
+  top: 1.2vw;
+  right: 10.77vw;
+  color: var(--orange);
+  font-size: 20px;
+  width: 13.22vw;
+  height: 3.95vw;
 
   &:hover {
     cursor: pointer;

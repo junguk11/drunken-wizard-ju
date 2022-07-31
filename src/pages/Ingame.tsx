@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 /* Hooks */
 import { useAppSelector, useAppDispatch } from "../hooks/tsHooks";
-import { Helmet } from "react-helmet";
+
 /* Modules */
 import {
   setRoomTitleTK,
@@ -27,27 +27,28 @@ import {
 } from "../redux/modules/ingameSlice";
 
 /* Cookies */
-import { getCookie } from "../shared/Cookies";
+import { getCookie } from "../Shared/Cookies";
 
 /* Components */
-import PlayerField from "../Components/IngameComponents/PlayerField/PlayerField";
-import DrawModal from "../Components/IngameComponents/Modals/DrawModal";
-import NoticeField from "../Components/IngameComponents/NoticeField/NoticeField";
-import StartModal from "../Components/IngameComponents/Modals/StartModal";
-import PlayerIcons from "../Components/IngameComponents/MainField/PlayerIcons";
-import CraveField from "../Components/IngameComponents/MainField/CraveField";
-import PlayerStatus from "../Components/IngameComponents/MainField/PlayerStatus";
+import PlayerField from "../Components/ingameComponents/PlayerField/PlayerField";
+import DrawModal from "../Components/ingameComponents/Modals/DrawModal";
+import NoticeField from "../Components/ingameComponents/NoticeField/NoticeField";
+import StartModal from "../Components/ingameComponents/Modals/StartModal";
+import PlayerIcons from "../Components/ingameComponents/MainField/PlayerIcons";
+import CraveField from "../Components/ingameComponents/MainField/CraveField";
+import PlayerStatus from "../Components/ingameComponents/MainField/PlayerStatus";
 import TwoBtnModal from "../elem/TwoBtnModal";
-import OverModal from "../Components/IngameComponents/Modals/OverModal";
-import PlayBtn from "../Components/Common/PlayBtn";
+import OverModal from "../Components/ingameComponents/Modals/OverModal";
+import Header from "../Components/HeaderComponents/Header";
+
 /* CSS & SC */
 import {
   StGameWrap,
   MainWrap,
   StGameWrapFilter,
-} from "../Components/IngameComponents/InGameStyled/InGameStyled";
+} from "../Components/ingameComponents/InGameStyled/InGameStyled";
 import { playersSetting } from "../typings/typedb";
-import AlertPopUp from "../Components/IngameComponents/InGameCommon/AlertPopUp";
+import AlertPopUp from "../Components/ingameComponents/InGameCommon/AlertPopUp";
 import useSound from "use-sound";
 import turn from "../sounds/turn.mp3";
 
@@ -107,18 +108,22 @@ const Ingame = () => {
   /* socket connect - token */
   const socket = new SockJS(`${API_URL}SufficientAmountOfAlcohol`);
   const stompClient = stompJS.over(socket);
-  stompClient.debug = (f) => f;
+  // stompClient.debug = (f) => f;
   const accessToken = getCookie("token");
   const { roomId } = useParams();
   const myId = Number(getCookie("id"));
 
+  const [reloadModal, setReloadModal] = useState<boolean>(false);
   const doNotReload = (event: any) => {
     if (
       (event.ctrlKey === true &&
         (event.keyCode === 78 || event.keyCode === 82)) ||
       event.keyCode === 116
     ) {
-      return window.confirm("새로고침하면 게임이 정상작동하지 않아요:(");
+      setReloadModal(true);
+      setTimeout(() => {
+        setReloadModal(false);
+      }, 1000);
     }
   };
 
@@ -199,9 +204,10 @@ const Ingame = () => {
                 }
 
                 if (setPlayerOrder[0].playerId === myId) {
-                  setTimeout(() => {
-                    sendStompMsgFunc(roomId, myId, "PRECHECK", null);
-                  }, 2000);
+                  // setTimeout(() => {
+                  //   sendStompMsgFunc(roomId, myId, "PRECHECK", null);
+                  // }, 2000);
+                  sendStompMsgFunc(roomId, myId, "PRECHECK", null);
                 } else {
                   setStatus("WAITING");
                 }
@@ -322,7 +328,6 @@ const Ingame = () => {
                 // 여기서 win/lose Modal
                 setOverTeam(msgData.winningTeam);
                 setStatus("ENDGAME");
-                alert("게임 끝! 이거는 나중에 만들게요!");
                 break;
               default:
                 break;
@@ -341,18 +346,19 @@ const Ingame = () => {
       case "READY":
         setTimeout(() => {
           sendStompMsgFunc(roomId, myId, "START", null);
-        }, 2000);
+        }, 500);
         break;
       case "WAITING":
         // console.log("아직 내 턴이 아니옵니다.");
         break;
       case "PRECHECK":
         // 만약 그게 나라면 이제 드로우를 하러 갑니다.
-        if (nowPlayerId === playersData.thisPlayer.playerId) {
+        if (nowPlayerId === myId) {
           sendStompMsgFunc(roomId, myId, "DRAW", null);
         } else {
           // 만약 내가 아니라면 지금 플레이하는 사람의 상태를 최신화할 것이다.
           updatePlayersFunc();
+          setStatus("WAITING");
         }
         break;
       case "DRAW":
@@ -365,7 +371,7 @@ const Ingame = () => {
           // 상태이상으로 인해 턴을 진행할 수 없습니다!
           setTimeout(() => {
             sendStompMsgFunc(roomId, Number(myId), "ENDTURN", null);
-          }, 2000);
+          }, 500);
         }
         break;
       case "USECARD":
@@ -392,16 +398,17 @@ const Ingame = () => {
           (value: playersSetting) =>
             value.playerId === playersData.PlayerC.playerId
         );
-        if (nowPlayerId === playersData.thisPlayer.playerId) {
-          if (PlayerA[0] !== undefined) {
-            dispatch(setPlayerATK(PlayerA[0]));
-          }
-          if (PlayerB[0] !== undefined) {
-            dispatch(setPlayerBTK(PlayerB[0]));
-          }
-          if (PlayerC[0] !== undefined) {
-            dispatch(setPlayerCTK(PlayerC[0]));
-          }
+        if (PlayerA[0] !== undefined) {
+          dispatch(setPlayerATK(PlayerA[0]));
+          setTargetText(PlayerA[0].username);
+        }
+        if (PlayerB[0] !== undefined) {
+          dispatch(setPlayerBTK(PlayerB[0]));
+          setTargetText(PlayerB[0].username);
+        }
+        if (PlayerC[0] !== undefined) {
+          dispatch(setPlayerCTK(PlayerC[0]));
+          setTargetText(PlayerC[0].username);
         }
         switch (craveCard.target) {
           case "SELECT":
@@ -454,14 +461,16 @@ const Ingame = () => {
           default:
             break;
         }
+        setStatus("WAITING");
         break;
       case "DISCARD":
         if (nowPlayerId !== playersData.thisPlayer.playerId) {
           updatePlayersFunc();
-          setStatus("ACTION");
+          setStatus("WAITING");
         }
         break;
       case "CHANGETURN":
+        ClearTimer();
         const nowPlayerName = playersList.filter(
           (value: playersSetting) => value.playerId === nowPlayerId
         );
@@ -489,7 +498,6 @@ const Ingame = () => {
   const waitForConnection = (stompClient: stompJS.Client, callback: any) => {
     setTimeout(function () {
       if (stompClient.ws.readyState === 1) {
-        // console.log("running");
         callback();
       } else {
         waitForConnection(stompClient, callback);
@@ -505,6 +513,7 @@ const Ingame = () => {
   ) => {
     waitForConnection(stompClient, function () {
       // connect - subscribe - send
+      // setTimeout(() => {
       try {
         stompClient.send(
           `/pub/game/${roomId}`,
@@ -520,6 +529,7 @@ const Ingame = () => {
         // console.log(error);
         setConnectModal(true);
       }
+      // }, 1000);
     });
   };
 
@@ -528,6 +538,7 @@ const Ingame = () => {
 
   const timerFunc = (sec: number, turn: string) => {
     timer.current = setTimeout(() => {
+      ClearTimer();
       setDrawModalOpen(false);
       sendStompMsgFunc(roomId, myId, turn, null);
       dispatch(setTimerTK(""));
@@ -586,23 +597,10 @@ const Ingame = () => {
     navigate("/lobby");
   };
 
+  const [roomOutModal, setRoomOutModal] = useState<boolean>(false);
   return (
     <>
-      <Helmet>
-        <title>Fight! Drunken Wizard</title>
-      </Helmet>
       {/* <PlayBtn></PlayBtn> */}
-      {connectModal && (
-        <TwoBtnModal
-          titleText="서버 연결 오류!"
-          upperText="원활한 게임 진행을 위해"
-          lowerText="서버 재접속을 진행하시겠습니까?"
-          confirmText="확인"
-          cancelText="취소"
-          confirmFunc={() => socketSubscribe()} // 함수는 사용할 함수를 보내주세요.
-          cancelFunc={() => leaveRoomFunc()} // 모달 창 닫을 useState 함수 보내주세요.
-        />
-      )}
       {startModal && (
         <AlertPopUp
           upperText="게임 시작!"
@@ -673,35 +671,53 @@ const Ingame = () => {
         <OverModal status={status} clickFunc={leaveRoomFunc}></OverModal>
       )}
 
+      {roomOutModal && (
+        <TwoBtnModal
+          confirmText={"확인"}
+          cancelText={"취소"}
+          titleText={"정말 방에서 나가시겠습니까?"}
+          upperText={"로비 화면으로 돌아갑니다."}
+          lowerText={"게임 도중 퇴장 시에는 패배로 기록됩니다."}
+          confirmFunc={leaveRoomFunc}
+          cancelFunc={() => setRoomOutModal(false)}
+        />
+      )}
+
+      {reloadModal && (
+        <AlertPopUp
+          upperText={`새로고침을 하면`}
+          middleText={`게임이 정상작동하지 않을 수 있어요!`}
+          bottomText=""
+        />
+      )}
       {status === "" ? (
         <StartModal setStatus={setStatus}></StartModal>
       ) : (
-        <StGameWrap>
-          <NoticeField></NoticeField>
-          <StGameWrapFilter>
-            {/* {status === "" ? (
-            <StartModal setStatus={setStatus}></StartModal>
-          ) : (
-            <> */}
-            <MainWrap>
-              <PlayerStatus></PlayerStatus>
-              <PlayerIcons status={status}></PlayerIcons>
-              <CraveField
+        <>
+          <NoticeField setRoomOutModal={setRoomOutModal}></NoticeField>
+          <StGameWrap>
+            <StGameWrapFilter>
+              <MainWrap>
+                <PlayerStatus></PlayerStatus>
+                <PlayerIcons status={status}></PlayerIcons>
+                <CraveField
+                  sendStompMsgFunc={sendStompMsgFunc}
+                  ClearTimer={ClearTimer}
+                ></CraveField>
+              </MainWrap>
+              <PlayerField
                 status={status}
                 sendStompMsgFunc={sendStompMsgFunc}
-              ></CraveField>
-            </MainWrap>
-            <PlayerField
-              status={status}
-              sendStompMsgFunc={sendStompMsgFunc}
-            ></PlayerField>
-            {drawModalOpen && (
-              <DrawModal sendStompMsgFunc={sendStompMsgFunc}></DrawModal>
-            )}{" "}
-            {/* </>
-          )} */}
-          </StGameWrapFilter>
-        </StGameWrap>
+              ></PlayerField>
+              {drawModalOpen && (
+                <DrawModal
+                  sendStompMsgFunc={sendStompMsgFunc}
+                  ClearTimer={ClearTimer}
+                ></DrawModal>
+              )}
+            </StGameWrapFilter>
+          </StGameWrap>
+        </>
       )}
     </>
   );

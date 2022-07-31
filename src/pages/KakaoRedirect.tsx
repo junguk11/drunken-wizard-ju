@@ -2,12 +2,14 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 // cookies
-import { getCookie, setCookie } from "../shared/Cookies";
+import { getCookie, setCookie } from "../Shared/Cookies";
 // interface
 import { loginStateProps } from "../typings/db";
 // apis
-import apis from "../shared/api/apis";
-import Loading from "./Loading";
+import apis from "../Shared/api/apis";
+import { BackWrap, LogLogo } from "../Components/UserComponents/UserStyled";
+import LoadingLobby from "./LoadingLobby";
+
 const KakaoRedirect = ({ setLoginState }: loginStateProps) => {
   const navigate = useNavigate();
   const accessToken = getCookie("token");
@@ -50,7 +52,12 @@ const KakaoRedirect = ({ setLoginState }: loginStateProps) => {
       navigate("/lobby");
     }
   }, [accessToken]);
-  return <Loading></Loading>;
+  return (
+    // <BackWrap>
+    //   <LogLogo top={5.729} bottom={4.6875}></LogLogo>
+    // </BackWrap>
+    <LoadingLobby></LoadingLobby>
+  );
 };
 
 export default KakaoRedirect;

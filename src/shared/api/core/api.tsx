@@ -1,6 +1,8 @@
 import axios from "axios";
 import { getCookie } from "../../Cookies";
 
+axios.defaults.withCredentials = true;
+
 /* axios instance */
 const API_URL = process.env.REACT_APP_API_URL;
 const api = axios.create({
@@ -8,7 +10,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  // 요청 성공 직전 호출 1
+  // 요청 성공 직전 호출
   // axios 설정값 넣음
   (config: any) => {
     const token = getCookie("token");

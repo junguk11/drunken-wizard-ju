@@ -2,10 +2,14 @@ import { Dispatch, MouseEvent, SetStateAction } from "react";
 
 export interface HeaderBtnProps {
   text: string;
-  clickFunc: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  clickFunc?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 export interface HeaderTitleProps {
   text: string;
+}
+
+export interface NoticeProps {
+  setRoomOutModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface OneBtnModalProps {
@@ -76,6 +80,7 @@ export interface DrawProps {
     msgType: string,
     data: object | null
   ) => void;
+  ClearTimer: () => void;
 }
 export interface IconsImgProps {
   job: string;
@@ -107,6 +112,7 @@ export interface FlagProps {
 }
 export interface TeamColorProps {
   team: boolean;
+  dead: boolean;
 }
 export interface StatBarProps {
   manaCostModifierDuration: number;
@@ -123,6 +129,7 @@ export interface StatIconsImgProps {
   stat: string;
   size: number;
   mouseOver: boolean;
+  value: number;
 }
 
 export interface CardBg {
@@ -208,6 +215,7 @@ export interface IngameAlertProps {
 }
 export interface Targeting {
   targeting: boolean;
+  dead: boolean;
 }
 
 export interface BtnColorType {

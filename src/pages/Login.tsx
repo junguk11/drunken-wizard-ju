@@ -10,14 +10,13 @@ import { passwordCheckF } from "../hooks/useCheck";
 import { useModal } from "../hooks/useModal";
 import { useFocus } from "../hooks/useFocus";
 // cookies
-import { setCookie } from "../shared/Cookies";
+import { setCookie } from "../Shared/Cookies";
 // kakao
-import { KAKAO_AUTH_URL } from "../shared/Kakao";
+import { KAKAO_AUTH_URL } from "../Shared/Kakao";
 // interface
 import { loginStateProps } from "../typings/db";
 // apis
-import apis from "../shared/api/apis";
-import { Helmet } from "react-helmet";
+import apis from "../Shared/api/apis";
 // css
 import {
   BackWrap,
@@ -29,7 +28,11 @@ import {
   LoginBtnBox,
   Check,
 } from "../Components/UserComponents/UserStyled";
-import { DefaultBtn, FormWrapSt } from "../Components/Common/CommonStyle";
+import {
+  DefaultBtn,
+  DefaultBtnKakao,
+  FormWrapSt,
+} from "../Components/Common/CommonStyle";
 import OneBtnModal from "../elem/OneBtnModal";
 
 // sounds
@@ -91,10 +94,6 @@ const Login = ({ setLoginState }: loginStateProps) => {
 
   return (
     <>
-      <Helmet>
-        <title>Drunken Wizard - Login</title>
-      </Helmet>
-
       <BackWrap>
         {loginCheck && (
           <OneBtnModal
@@ -106,7 +105,7 @@ const Login = ({ setLoginState }: loginStateProps) => {
           />
         )}
         <FormWrapSt>
-          <LogLogo top={5.729} bottom={4.6875} />
+          <LogLogo top={12.729} bottom={4.6875} />
           <form>
             <label id="user-id-label">
               <InputBoxId>
@@ -197,14 +196,14 @@ const Login = ({ setLoginState }: loginStateProps) => {
             </Link>
           </LoginBtnBox>
           <a href={KAKAO_AUTH_URL}>
-            <DefaultBtn
+            <DefaultBtnKakao
               btnType="kakao"
-              size={22.8125}
+              size={22.82}
               onClick={() => {
                 play();
               }}
               style={{ marginBottom: "2.77vw" }}
-            ></DefaultBtn>
+            ></DefaultBtnKakao>
           </a>
         </FormWrapSt>
       </BackWrap>

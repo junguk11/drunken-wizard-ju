@@ -8,10 +8,9 @@ import { useModal } from "../hooks/useModal";
 import stompJS from "stompjs";
 import sockJS from "sockjs-client";
 // cookies
-import { getCookie } from "../shared/Cookies";
+import { getCookie } from "../Shared/Cookies";
 // apis
-import apis from "../shared/api/apis";
-import { Helmet } from "react-helmet";
+import apis from "../Shared/api/apis";
 // css
 import {
   Header,
@@ -42,6 +41,7 @@ const WaitingRoom = () => {
   const [waitingUsers, setWaitingUsers] = useState<any>();
   const [readyUser, setReadyUser] = useState<boolean>(false);
   const [roomOutModal, setRoomOutModal] = useModal<boolean>(false);
+  const [logOutBtnState, setLogOutBtnState] = useState<boolean>(false);
   const { roomId } = useParams();
   const navigate = useNavigate();
   const socket = new sockJS(`${API_URL}SufficientAmountOfAlcohol`);
@@ -63,19 +63,6 @@ const WaitingRoom = () => {
       // console.log(error);
     },
   });
-  // // 새로고침 막기
-  // const doNotReload = (event) => {
-  //   if (
-  //     (event.ctrlKey === true &&
-  //       (event.keyCode === 78 || event.keyCode === 82)) ||
-  //     event.keyCode === 116
-  //   ) {
-  //     return window.confirm('새로고침하면 게임이 정상작동하지 않아요:(');
-  //   }
-  // };
-  // useEffect(() => {
-  //   document.onkeydown = doNotReload;
-  // });
 
   // leaveHandler
   const leaveHandler = useCallback(() => {
@@ -116,13 +103,16 @@ const WaitingRoom = () => {
                   res?.player4?.id === Number(accessId))
               ) {
                 setReadyUser(true);
+                setLogOutBtnState(true);
               } else {
                 setReadyUser(false);
+                setLogOutBtnState(false);
               }
             },
             { token: accessToken }
           );
           joinRoomMessage();
+          leaveMessage();
         }
       );
     } catch (error) {
@@ -138,6 +128,17 @@ const WaitingRoom = () => {
       // console.log(error);
     }
   }, []);
+
+  const leaveMessage = () => {
+    const accessName = getCookie("nickname");
+    const data = {
+      type: "LEAVE",
+      sender: accessId,
+      nickname: accessName,
+      message: `${accessName}님이 게임하러 갔습니다.`,
+    };
+    stompClient.send("/pub/chat/send", {}, JSON.stringify(data));
+  };
 
   const joinRoomMessage = () => {
     const data = {
@@ -203,9 +204,6 @@ const WaitingRoom = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Welcome! Drunken Wizard</title>
-      </Helmet>
       {roomOutModal && (
         <TwoBtnModal
           confirmText={"확인"}
@@ -218,7 +216,11 @@ const WaitingRoom = () => {
         />
       )}
       <Header>
-        <HeaderBtn clickFunc={setRoomOutModal} text={"방나가기"} />
+        {logOutBtnState ? (
+          <HeaderBtn text={"방나가기"} />
+        ) : (
+          <HeaderBtn clickFunc={setRoomOutModal} text={"방나가기"} />
+        )}
         <HeaderRoomTitle text={`${waitingUsers?.roomName}`} />
       </Header>
       <WaitingWrap>

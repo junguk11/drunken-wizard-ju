@@ -3,21 +3,21 @@ import { ImgNumType, JoinRoomType, ModalDivProps } from "../../typings/db";
 // css
 import flex from "../GlobalStyled/flex";
 // img
-import chatIcon from "../../images/lobby/chat.png";
-import header from "../../images/imgs/header.png";
-import vs from "../../images/imgs/vs.png";
-import x from "../../images/lobby/x.png";
-import team1 from "../../images/lobby/team1.png";
-import team2 from "../../images/lobby/team2.png";
-import teamX1 from "../../images/lobby/teamX1.png";
-import teamX2 from "../../images/lobby/teamX2.png";
-import lobbyBack from "../../images/background/lobbybackground.png";
+import chatIcon from "../../images/lobby/chat.webp";
+import header from "../../images/imgs/header.webp";
+import vs from "../../images/imgs/vs.webp";
+import x from "../../images/lobby/x.webp";
+import team1 from "../../images/lobby/team1.webp";
+import team2 from "../../images/lobby/team2.webp";
+import teamX1 from "../../images/lobby/teamX1.webp";
+import teamX2 from "../../images/lobby/teamX2.webp";
+import lobbyBack from "../../images/background/lobbybackground.webp";
 import { pageProps, TeamProps } from "../../typings/typedb";
 import matchProfileImg from "./Team";
-import left from "../../images/buttons/BTN_left.png";
-import leftEnd from "../../images/buttons/BTN_leftend.png";
-import right from "../../images/buttons/BTN_right.png";
-import rightEnd from "../../images/buttons/BTN_rightend.png";
+import left from "../../images/buttons/BTN_left.webp";
+import leftEnd from "../../images/buttons/BTN_leftend.webp";
+import right from "../../images/buttons/BTN_right.webp";
+import rightEnd from "../../images/buttons/BTN_rightend.webp";
 
 // lobby
 export const WrapBack = styled.div`

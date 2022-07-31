@@ -1,12 +1,12 @@
 import styled, { css } from "styled-components";
 import flex from "../GlobalStyled/flex";
 import { BtnProps, BtnSettings } from "../../typings/typedb";
-import kakaoBtn from "../../images/buttons/BTN_kakao.png";
-import activeMBtn from "../../images/buttons/BTN_activeM.png";
-import inactiveMBtn from "../../images/buttons/BTN_inactiveM.png";
-import BtnActive from "../../images/buttons/BTN_active.png";
-import BtnInActive from "../../images/buttons/BTN_inActive.png";
-
+import kakaoBtn from "../../images/buttons/BTN_kakao.webp";
+import activeMBtn from "../../images/buttons/BTN_activeM.webp";
+import inactiveMBtn from "../../images/buttons/BTN_inactiveM.webp";
+import BtnActive from "../../images/buttons/BTN_active.webp";
+import BtnInActive from "../../images/buttons/BTN_inActive.webp";
+//
 export const StWrap = styled.div`
   width: 100vmax;
   height: 100vmax;
@@ -76,6 +76,7 @@ export const DefaultBtn = styled.button<BtnProps>`
   }
   background-image: url(${(props) => matchBtnImg(props.btnType)});
   background-size: cover;
+  background-color: transparent;
   width: ${({ size }) => size && `${size}vw`};
   height: 4.3229vw;
   font-size: 1.25vw;
@@ -84,5 +85,29 @@ export const DefaultBtn = styled.button<BtnProps>`
   }
   .kakao__btn {
     margin-bottom: 7.552vw;
+    border-radius: 1vw;
+  }
+`;
+export const DefaultBtnKakao = styled.button<BtnProps>`
+  &:hover {
+    cursor: pointer;
+    filter: brightness(110%);
+    box-shadow: 0px 0px 0.5208vw 0.104vw #fd6f33;
+  }
+  background-image: url(${(props) => matchBtnImg(props.btnType)});
+  background-position: 55% 45%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border-radius: 0.8vw;
+  width: ${({ size }) => size && `${size}vw`};
+  height: 4.3229vw;
+  font-size: 1.25vw;
+  span {
+    ${BtnTextSt};
+  }
+  .kakao__btn {
+    margin-bottom: 7.552vw;
+    border-radius: 1vw;
   }
 `;
